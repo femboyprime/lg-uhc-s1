@@ -1,0 +1,21 @@
+name: uhc2
+version: '${project.version}'
+main: org.uhc2.Uhc2
+author: scriiipt
+commands:
+  gm:
+    description: faster way of using /gamemode
+  heal:
+    description: heals you or any players
+  feed:
+    description: feeds you or any players
+  startuhc:
+    description: starts the uhc
+  stopuhc:
+    description: stops the uhc
+  compo:
+    description: add or remove roles with a gui
+  test:
+    description: test command :p
+  lg:
+    description: toute les commandes en relation avec le plugin LG UHC
