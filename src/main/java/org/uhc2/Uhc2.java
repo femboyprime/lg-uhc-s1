@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.uhc2.events.eventsManager;
 import org.uhc2.enums.states;
 import org.uhc2.enums.roles;
@@ -44,7 +46,7 @@ public final class Uhc2 extends JavaPlugin {
     public states state = states.WAITING;
 
     //--// TIMERS
-    public int timeForEpisode = (1_200_000 / 10); // 1_200_000 = 20 mns
+    public int timeForEpisode = (1_200_000 / 40); // 1_200_000 = 20 mns
     public int timeForCycle = (timeForEpisode / 2); // 10mns Jour / 10mns Nuit
 
     //-// pouvoirs.java
@@ -125,13 +127,13 @@ public final class Uhc2 extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            Joueur playerJoueur = utils.getJoueur(player);
+
             boolean isOwner = player.getUniqueId().toString().equals("0fc289a2-8dda-429a-b727-7f1e9811d747");
-            boolean isHost = true;
+            // boolean isHost = true;
 
             String commandName = command.getName();
 
-            if ((isOwner || isHost) && (playerJoueur != null)) {
+            if (isOwner) {
                 // les commandes pour les hosts / owner
 
                 if (commandName.equalsIgnoreCase("gm")) {
@@ -274,16 +276,25 @@ public final class Uhc2 extends JavaPlugin {
                 } else if (commandName.equalsIgnoreCase("compo")) {
                     composition.entityOpenInventory(player);
                 } else if (commandName.equalsIgnoreCase("test")) {
-                    player.sendMessage(ChatColor.RED + "rien à test, sorry ! -femboyprime"); //
+                    if (!utils.isPlayerJoueur(player)) {
+                        player.sendMessage(ChatColor.RED + "rien à test, sorry ! -femboyprime"); //
+                    } else {
+                        Joueur joueur = utils.getJoueur(player);
+
+                        pouvoirs.giveEffect(joueur, pouvoirs.lg_speed);
+                        pouvoirs.giveEffect(joueur, pouvoirs.lg_abso);
+                    }
+
                     return true;
                 } else if (commandName.equalsIgnoreCase("lg")) {
+                    Joueur joueur = utils.getJoueur(player);
+
                     try {
                         // main cmd
                         String sousCommande = args[0];
                         utils.sendMessageToAll("sousCommande: " + sousCommande);
 
                         if (sousCommande.equalsIgnoreCase("voir")) {
-
                             // voir cmd -> voyante_bavarde
                             try {
                                 String playerName = args[1];
@@ -292,14 +303,51 @@ public final class Uhc2 extends JavaPlugin {
                                 if (target != null && utils.isPlayerJoueur(target)) {
                                     Joueur targetJoueur = utils.getJoueur(target);
 
-                                    if (targetJoueur != null && (targetJoueur.getRole() == roles.Voyante_Bavarde && !targetJoueur.hasSeen)) {
-                                        playerJoueur.hasSeen = true;
-                                        utils.sendMessageToAll(gameTag_Public + "La " + _villageois + "Voyante Bavarde" + _text + " a espionné un joueur et son rôle est : " + targetJoueur.getRole().getStrColor() + targetJoueur.getRole().getName() + _text + ".");
+                                    if (targetJoueur != null && joueur.getRole() == roles.Voyante_Bavarde) {
+                                        if (!joueur.hasSeen) {
+                                            joueur.hasSeen = true;
+
+                                            utils.sendMessageToAll(gameTag_Public + "La " + _villageois + "Voyante Bavarde" + _text + " a espionné un joueur et son rôle est : " + targetJoueur.getRole().getStrColor() + targetJoueur.getRole().getName() + _text + ".");
+                                        } else {
+                                            joueur.sendMessage(gameTag_Prive + "Vous avez déjà regardé le rôle d'un joueur cette épisode.");
+                                        }
+
                                     }
                                 }
                             } catch (Exception ignored) {}
 
                             return true;
+                        } else if (sousCommande.equalsIgnoreCase("salvater")) {
+                            // salvater cmd -> salvateur
+                            try {
+                                String playerName = args[1];
+                                Player target = Bukkit.getPlayer(playerName);
+
+                                if (target != null && utils.isPlayerJoueur(target)) {
+                                    Joueur targetJoueur = utils.getJoueur(target);
+
+                                    if (targetJoueur != null && joueur.getRole() == roles.Salvateur) {
+                                        if (!joueur.hasProtected) {
+                                            if (joueur.lastProtected != target) {
+                                                joueur.hasProtected = true;
+                                                joueur.lastProtected = target;
+                                                targetJoueur.isProtected = true;
+
+                                                PotionEffect resistance = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, (timeForEpisode / 50), 0, false, false);
+                                                pouvoirs.giveEffect(targetJoueur, resistance);
+
+                                                targetJoueur.sendMessage(gameTag_Prive + "Le "+_villageois+"Salvateur"+_text+" vous a salvaté! Vous disposez de l'effet "+_res+"Resistance"+_text+" ainsi que "+_res+"NoFall"+_text+" pendant cette épisode.");
+
+                                            } else {
+                                                joueur.sendMessage(gameTag_Prive + "Vous avez déjà salvaté le joueur l'épisode d'avant.");
+                                            }
+                                        } else {
+                                            joueur.sendMessage(gameTag_Prive + "Vous avez déjà salvaté un joueur cette épisode.");
+                                        }
+
+                                    }
+                                }
+                            } catch (Exception ignored) {}
                         }
 
                         return true;
@@ -309,7 +357,7 @@ public final class Uhc2 extends JavaPlugin {
                 }
 
             } else {
-                player.sendMessage(gameTag_Public + "You do §cnot have§9 permission to run this command.");
+                player.sendMessage(gameTag_Public + "You do §cnot have"+_text+" permission to run this command.");
                 return true;
 
             }

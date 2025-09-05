@@ -12,6 +12,7 @@ public class eventsManager {
         pluginManager.registerEvents(main.composition, main);
         pluginManager.registerEvents(new PlayerJoinLeave(main), main);
         pluginManager.registerEvents(new PlayerDeath(main), main);
+        pluginManager.registerEvents(new PlayerFallDamage(main), main);
     }
 
 }

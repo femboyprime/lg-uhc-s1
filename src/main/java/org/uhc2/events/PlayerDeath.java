@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.uhc2.Joueur;
 import org.uhc2.Uhc2;
+import org.uhc2.enums.roles;
 
 import java.util.UUID;
 
@@ -25,20 +26,25 @@ public class PlayerDeath implements Listener {
             event.setKeepInventory(false);
 
             Joueur joueurMort = main.utils.getJoueur(player);
-            joueurMort.setMort(true); // CIAAAAAAAAOOOOOO !!!
 
-            if (player.getKiller() != null && player.getKiller().getType() == EntityType.PLAYER && main.utils.isPlayerJoueur(player.getKiller())) {
-                Player killer = player.getPlayer();
-                UUID killerUUID = killer.getUniqueId();
-                Joueur joueurKiller = main.utils.getJoueur(killer);
+            if (joueurMort.getRole() == roles.Ancien && !joueurMort.hasRespawned) {
+                joueurMort.hasRespawned = true;
+            } else {
+                joueurMort.setMort(true); // CIAAAAAAAAOOOOOO !!!
 
-                if (joueurKiller.getUUID() == killerUUID && joueurKiller.isLoup_Effect() ) {
-                    main.utils.sendMessageToAll("GAVE OUT lg_kill_effects !!");
-                    main.pouvoirs.giveEffects(joueurKiller, main.pouvoirs.lg_kill_effects);
+                if (player.getKiller() != null && player.getKiller().getType() == EntityType.PLAYER && main.utils.isPlayerJoueur(player.getKiller())) {
+                    Player killer = player.getPlayer();
+                    UUID killerUUID = killer.getUniqueId();
+                    Joueur joueurKiller = main.utils.getJoueur(killer);
+
+                    if (joueurKiller.getUUID() == killerUUID && joueurKiller.isLoup_Effect() ) {
+                        main.utils.sendMessageToAll("GAVE OUT lg_kill_effects !!");
+                        main.pouvoirs.giveEffects(joueurKiller, main.pouvoirs.lg_kill_effects);
+                    }
                 }
-            }
 
-            main.utils.sendMessageToAll(new String[]{"§c=========☠==========","§2Le village a perdu un de ses membres : " + joueurMort.getRole().strcolor + "§l" + joueurMort.getName() + "§r§2, qui était " + joueurMort.getRole().strcolor + "§o" + joueurMort.getRole().nom + "§r§2.", "§c===================="});
+                main.utils.sendMessageToAll(new String[]{"§c=========☠==========","§2Le village a perdu un de ses membres : " + joueurMort.getRole().strcolor + "§l" + joueurMort.getName() + "§r§2, qui était " + joueurMort.getRole().strcolor + "§o" + joueurMort.getRole().nom + "§r§2.", "§c===================="});
+            }
         } else {
             event.setDeathMessage("§b[§c☠§b] §3§l" + player.getName() + "§r§3 est mort.");
             event.setKeepInventory(false);

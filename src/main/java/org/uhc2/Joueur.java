@@ -38,6 +38,7 @@ public class Joueur {
     // salva
     public boolean hasProtected = false;
     public boolean isProtected = false;
+    public Player lastProtected = null;
     // ancien
     public boolean hasRespawned = false;
     // chaman
