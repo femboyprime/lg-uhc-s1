@@ -2,7 +2,6 @@ package org.uhc2.events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,8 +10,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.uhc2.Joueur;
 import org.uhc2.Uhc2;
 import org.uhc2.enums.roles;
-
-import java.util.UUID;
+import org.uhc2.scoreboard.ScoreboardSign;
 
 public class PlayerJoinLeave implements Listener {
     private final Uhc2 main;
@@ -31,9 +29,16 @@ public class PlayerJoinLeave implements Listener {
                 player.setMaxHealth(20);
             }
 
+            // scoreboardsign sauvegarde pas -> create a chaque fois x)
+            joueur.scoreboard.destroy();
+            ScoreboardSign scoreboard = main.utils.makeScoreboard(player);
+            joueur.setScoreboard(scoreboard);
+
+            // on set les nouveaux trucs (tu connais)
             joueur.setUUID(player.getUniqueId());
             joueur.setPlayer();
             joueur.setName();
+
         } else {
             player.setMaxHealth(20);
         }

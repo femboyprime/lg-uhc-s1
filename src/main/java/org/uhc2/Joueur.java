@@ -53,13 +53,10 @@ public class Joueur {
         this.player = player;
 
         // server stuff
-        // setPlayer();
         setName();
 
         // setup main
         this.main = main;
-        this.main.playerJoueur.put(player, this);
-        this.main.joueurPlayer.put(this, player);
     }
     //-// MAIN
 
@@ -102,6 +99,7 @@ public class Joueur {
     public roles getRole() { return role; }
     public camps getCamp() { return camp; }
     public UUID getUUID() { return uuid; }
+    public ScoreboardSign getScoreboard() { return scoreboard; }
 
     // quicker methods
     public void sendMessage(String message) {

@@ -23,7 +23,7 @@ public class Pouvoirs {
     public final PotionEffect nightvision = new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false);
     public final PotionEffect force = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 0, false, false);
     public final PotionEffect lg_speed = new PotionEffect(PotionEffectType.SPEED, 1200, 0, false, false);
-    public final PotionEffect lg_abso = new PotionEffect(PotionEffectType.ABSORPTION, 4800, 0, false, false);
+    public final PotionEffect lg_abso = new PotionEffect(PotionEffectType.ABSORPTION, 4800, 1, false, false);
 
     public final Collection<PotionEffect> lg_kill_effects = Arrays.asList(lg_speed, lg_abso);
 

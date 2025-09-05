@@ -26,8 +26,12 @@ public class Utils {
 
         for (Player player : getServer().getOnlinePlayers()) {
             Joueur joueur = new Joueur(player, player.getUniqueId(), this.main);
+
+            main.playerJoueur.put(player, joueur);
+            main.joueurPlayer.put(joueur, player);
+
             ScoreboardSign scoreboard = makeScoreboard(player);
-            main.joueursScoreboard.put(scoreboard, joueur);
+            joueur.setScoreboard(scoreboard);
         }
 
         main.mainTimer = new Timer();
@@ -36,8 +40,8 @@ public class Utils {
             public void run() {
                 main.mainTimerInt = main.mainTimerInt + 1;
 
-                for (ScoreboardSign scoreboard : main.joueursScoreboard.keySet()) {
-                    scoreboard.setLine(9, ChatColor.GOLD + "Timer: " + ChatColor.YELLOW + String.format("%02d:%02d", main.mainTimerInt / 60, main.mainTimerInt % 60));
+                for (Joueur joueur : main.joueurPlayer.keySet()) {
+                    joueur.getScoreboard().setLine(9, ChatColor.GOLD + "Timer: " + ChatColor.YELLOW + String.format("%02d:%02d", main.mainTimerInt / 60, main.mainTimerInt % 60));
                 }
             }
         };
@@ -53,37 +57,31 @@ public class Utils {
                 main.cycle = !main.cycle;
 
                 if (main.cycle) {
-                    for (ScoreboardSign scoreboard : main.joueursScoreboard.keySet()) {
+                    for (Joueur joueur : main.joueurPlayer.keySet()) {
                         // set scoreboard
-                        scoreboard.setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Jour");
-
-                        // le ingame time
-                        if (world != null) {
-                            world.setTime(6000);
-                        }
+                        joueur.scoreboard.setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Jour");
 
                         // effets de jours
-                        for (Joueur joueur : main.joueurPlayer.keySet()) {
-                            main.pouvoirs.giveDay(joueur);
-                        }
+                        main.pouvoirs.giveDay(joueur);
+                    }
 
+                    // le ingame time
+                    if (world != null) {
+                        world.setTime(6000);
                     }
 
                 } else {
-                    for (ScoreboardSign scoreboard : main.joueursScoreboard.keySet()) {
+                    for (Joueur joueur : main.joueurPlayer.keySet()) {
                         // set scoreboard
-                        scoreboard.setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Nuit");
-
-                        // le ingame time
-                        if (world != null) {
-                            world.setTime(18000);
-                        }
+                        joueur.scoreboard.setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Nuit");
 
                         // effets de nuits
-                        for (Joueur joueur : main.joueurPlayer.keySet()) {
-                            main.pouvoirs.giveNight(joueur);
-                        }
+                        main.pouvoirs.giveNight(joueur);
+                    }
 
+                    // le ingame time
+                    if (world != null) {
+                        world.setTime(18000);
                     }
                 }
             }
@@ -114,8 +112,9 @@ public class Utils {
                     }
                 }
 
-                for (ScoreboardSign scoreboard : main.joueursScoreboard.keySet()) {
-                    scoreboard.setLine(7, ChatColor.AQUA + "Episode " + ChatColor.GOLD + main.episodeInt);
+                for (Joueur joueur : main.joueurPlayer.keySet()) {
+                    joueur.scoreboard.setLine(6, ChatColor.AQUA + "Episode " + ChatColor.GOLD + main.episodeInt);
+
                 }
             }
         };
@@ -137,11 +136,8 @@ public class Utils {
         main.episodeTimer.cancel();
         main.cycleTimer.cancel();
 
-        for (ScoreboardSign scoreboard : main.joueursScoreboard.keySet()) {
-            scoreboard.destroy();
-        }
-
         for (Joueur joueur : main.joueurPlayer.keySet()) {
+            joueur.scoreboard.destroy();
             joueur.getPlayer().setMaxHealth(20);
 
             for (PotionEffect effect : joueur.getPlayer().getActivePotionEffects()) {
@@ -149,7 +145,6 @@ public class Utils {
             }
         }
 
-        main.joueursScoreboard.clear();
         main.joueurPlayer.clear();
         main.playerJoueur.clear();
     }
@@ -164,28 +159,28 @@ public class Utils {
                     .skip(rng.nextInt(main.playerJoueur.size()))
                     .findFirst().get();
 
-            if (role.number > 0 && joueurToGive.role == null) {
-                role.number = role.number - 1;
+            if (role.getNumber() > 0 && joueurToGive.role == null) {
+                role.setNumber(role.getNumber() - 1);
 
                 // set role & camp
                 joueurToGive.setRole(role);
-                joueurToGive.setCamp(role.camp);
+                joueurToGive.setCamp(role.getCamp());
 
                 // give effects
                 main.pouvoirs.givePermanent(joueurToGive);
                 main.pouvoirs.giveOneTime(joueurToGive);
 
                 // petit sounds
-                if (role.camp == camps.Village) {
+                if (role.getCamp() == camps.Village) {
                     playSound(joueurToGive, Sound.VILLAGER_IDLE);
-                } else if (role.camp == camps.LoupGarou) {
+                } else if (role.getCamp() == camps.LoupGarou) {
                     playSound(joueurToGive, Sound.WOLF_GROWL);
-                } else if (role.camp == camps.Neutre) {
+                } else if (role.getCamp() == camps.Neutre) {
                     playSound(joueurToGive, Sound.ENDERDRAGON_GROWL);
                 }
 
                 // envoie les messages
-                joueurToGive.sendMessage(new String[]{main.gameTag_Prive + "Vous êtes " + role.strcolor + role.nom + "§9.", role.description});
+                joueurToGive.sendMessage(new String[]{main.gameTag_Prive + "Vous êtes " + role.getStrColor() + role.getName() + "§9.", role.getDescription()});
             }
 
 
@@ -240,7 +235,7 @@ public class Utils {
     public void timerResume() {
         int nombreRoles = 0;
         for (roles role : roles.values()) {
-            nombreRoles = nombreRoles + role.number;
+            nombreRoles = nombreRoles + role.getNumber();
         }
 
         sendMessageToAll("nombreRoles: " + nombreRoles + " // getOnlinePlayers(): " + Bukkit.getOnlinePlayers().size());
@@ -286,20 +281,33 @@ public class Utils {
     }
 
     public boolean isPlayerJoueur(Player player) {
-        return (getJoueur(player) != null);
+        return ( getJoueur(player) != null );
     }
 
-    public Joueur getJoueur(Player player) {
-        return main.playerJoueur.get(player);
+    public Joueur getJoueur(Player mainPlayer) {
+        for (Player player2 : main.playerJoueur.keySet()) {
+            if (player2.getUniqueId().toString().equals( mainPlayer.getUniqueId().toString() )) {
+                return main.playerJoueur.get(player2);
+            }
+        }
+
+        return null;
     }
 
-    private ScoreboardSign makeScoreboard(Player player) {
+    public ScoreboardSign makeScoreboard(Player player) {
         ScoreboardSign scoreboard = new ScoreboardSign(player, "§l§nLG UHC S1");
         scoreboard.create();
 
+        int jrs = 0;
+        for (Joueur joueur : main.joueurPlayer.keySet()) {
+            if (!joueur.mort) {
+                jrs = jrs + 1;
+            }
+        }
+
         scoreboard.setLine(5," ");
         scoreboard.setLine(6, ChatColor.AQUA + "Episode " + ChatColor.GOLD + "1");
-        scoreboard.setLine(7, ChatColor.RED + "##" + ChatColor.DARK_RED + " Joueurs");
+        scoreboard.setLine(7, ChatColor.RED + "" + jrs + ChatColor.DARK_RED + " Joueurs");
         scoreboard.setLine(8, "  ");
         scoreboard.setLine(9, ChatColor.GOLD + "Timer: " + ChatColor.YELLOW + "00:00");
         scoreboard.setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Nuit");

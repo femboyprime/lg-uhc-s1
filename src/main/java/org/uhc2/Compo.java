@@ -51,10 +51,10 @@ public class Compo implements Listener {
             main.roleListInt.put(roleInt, role);
             roleInt = roleInt + 1;
 
-            if (role.number >= 1) {
-                roleInventory.addItem(createDyeGui(role.intcolor, role.number, (role.strcolor + role.nom), "Le role est activé :)"));
+            if (role.getNumber() >= 1) {
+                roleInventory.addItem(createDyeGui(role.getIntColor(), role.getNumber(), (role.getStrColor() + role.getName()), "Le role est activé :)"));
             } else {
-                roleInventory.addItem(createDyeGui(8, 1, (role.strcolor + role.nom), "le role n'est pas activé :("));
+                roleInventory.addItem(createDyeGui(8, 1, (role.getStrColor() + role.getName()), "le role n'est pas activé :("));
             }
         }
     }
@@ -79,18 +79,18 @@ public class Compo implements Listener {
             if (clickedItem == null || clickedItem.getType().equals(Material.AIR)) return;
 
             if (isRightClick) {
-                if (roleFromSlot.number >= 1) {
-                    roleFromSlot.number = roleFromSlot.number - 1;
-                    if (main.debugMessages) {player.sendMessage(main.gameTag_Prive + "Le rôle '§b" + roleFromSlot.nom + "§9' a bien été enlevé.");}
+                if (roleFromSlot.getNumber() >= 1) {
+                    roleFromSlot.setNumber(roleFromSlot.getNumber() - 1);
+                    if (main.debugMessages) {player.sendMessage(main.gameTag_Prive + "Le rôle '§b" + roleFromSlot.getName() + "§9' a bien été enlevé.");}
                 } else {
-                    if (main.debugMessages) {player.sendMessage(main.gameTag_Prive + "Le rôle '§b" + roleFromSlot.nom + "§9' n'est pas dans la composition.");}
+                    if (main.debugMessages) {player.sendMessage(main.gameTag_Prive + "Le rôle '§b" + roleFromSlot.getName() + "§9' n'est pas dans la composition.");}
                 }
             } else if (isLeftClick) {
-                if (roleFromSlot.number <= 63) {
-                    roleFromSlot.number = roleFromSlot.number + 1;
-                    if (main.debugMessages) {player.sendMessage(main.gameTag_Prive + "Le rôle '§b" + roleFromSlot.nom + "§9' a bien été ajouté.");}
+                if (roleFromSlot.getNumber()  <= 63) {
+                    roleFromSlot.setNumber(roleFromSlot.getNumber() + 1);
+                    if (main.debugMessages) {player.sendMessage(main.gameTag_Prive + "Le rôle '§b" + roleFromSlot.getName() + "§9' a bien été ajouté.");}
                 } else {
-                    if (main.debugMessages) {player.sendMessage(main.gameTag_Prive + "Le rôle '§b" + roleFromSlot.nom + "§9' n'a pas pu être ajouté.");}
+                    if (main.debugMessages) {player.sendMessage(main.gameTag_Prive + "Le rôle '§b" + roleFromSlot.getName() + "§9' n'a pas pu être ajouté.");}
                 }
             }
 
