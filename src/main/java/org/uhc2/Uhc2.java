@@ -125,12 +125,13 @@ public final class Uhc2 extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
+            Joueur playerJoueur = utils.getJoueur(player);
             boolean isOwner = player.getUniqueId().toString().equals("0fc289a2-8dda-429a-b727-7f1e9811d747");
             boolean isHost = true;
 
             String commandName = command.getName();
 
-            if (isOwner || isHost) {
+            if ((isOwner || isHost) && (playerJoueur != null)) {
                 // les commandes pour les hosts / owner
 
                 if (commandName.equalsIgnoreCase("gm")) {
@@ -273,23 +274,13 @@ public final class Uhc2 extends JavaPlugin {
                 } else if (commandName.equalsIgnoreCase("compo")) {
                     composition.entityOpenInventory(player);
                 } else if (commandName.equalsIgnoreCase("test")) {
-                    try {
-                        String sndUsed = args[0];
-                        utils.playSound(player, Sound.valueOf(sndUsed));
-
-                        return true;
-                    } catch (Exception exception) {
-                        // player.sendMessage(exception.getMessage());
-                        return true;
-                    }
-
-
-                    // player.sendMessage(ChatColor.RED + "rien à test, sorry ! -femboyprime"); //
-                    // return true;
+                    player.sendMessage(ChatColor.RED + "rien à test, sorry ! -femboyprime"); //
+                    return true;
                 } else if (commandName.equalsIgnoreCase("lg")) {
                     try {
                         // main cmd
                         String sousCommande = args[0];
+                        utils.sendMessageToAll("sousCommande: " + sousCommande);
 
                         if (sousCommande.equalsIgnoreCase("voir")) {
 
@@ -301,23 +292,20 @@ public final class Uhc2 extends JavaPlugin {
                                 if (target != null && utils.isPlayerJoueur(target)) {
                                     Joueur targetJoueur = utils.getJoueur(target);
 
-                                    if (targetJoueur != null && targetJoueur.getRole() == roles.Voyante_Bavarde) {
-                                        utils.sendMessageToAll(gameTag_Public + "La " + _villageois + "voyante bavarde" + _text + " a espionné un joueur et son rôle est : " + targetJoueur.getRole().getStrColor() + targetJoueur.getRole().getName() + _villageois + ".");
+                                    if (targetJoueur != null && (targetJoueur.getRole() == roles.Voyante_Bavarde && !targetJoueur.hasSeen)) {
+                                        playerJoueur.hasSeen = true;
+                                        utils.sendMessageToAll(gameTag_Public + "La " + _villageois + "Voyante Bavarde" + _text + " a espionné un joueur et son rôle est : " + targetJoueur.getRole().getStrColor() + targetJoueur.getRole().getName() + _text + ".");
                                     }
                                 }
-
-                            } catch (Exception exception) {
-                                player.sendMessage(ChatColor.RED + "va niquer ta race <3");
-                            }
+                            } catch (Exception ignored) {}
 
                             return true;
                         }
 
                         return true;
-                    } catch (Exception exception) {
-                        player.sendMessage(exception.getMessage());
-                        return true;
-                    }
+                    } catch (Exception ignored) {}
+
+                    return true;
                 }
 
             } else {
@@ -328,8 +316,6 @@ public final class Uhc2 extends JavaPlugin {
 
         }
         return true; // j'ai oublié :(
-
-        // return true; // unreachable!!
     }
 
 }

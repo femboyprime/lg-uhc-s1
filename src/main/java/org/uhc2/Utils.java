@@ -106,6 +106,14 @@ public class Utils {
                     giveRoles();
                 }
 
+                if (main.episodeInt >= 2) {
+                    for (Joueur joueur : main.joueurPlayer.keySet()) {
+                        joueur.hasSeen = false;
+                        joueur.hasProtected = false;
+                        joueur.isProtected = false;
+                    }
+                }
+
                 for (ScoreboardSign scoreboard : main.joueursScoreboard.keySet()) {
                     scoreboard.setLine(7, ChatColor.AQUA + "Episode " + ChatColor.GOLD + main.episodeInt);
                 }
@@ -298,7 +306,7 @@ public class Utils {
         scoreboard.setLine(11, "   ");
         scoreboard.setLine(12, ChatColor.DARK_GREEN + "Border: " + ChatColor.GREEN + "####");
         scoreboard.setLine(13, "    ");
-        scoreboard.setLine(14,  ChatColor.UNDERLINE + "@femboysanslimite");
+        scoreboard.setLine(14,  ChatColor.UNDERLINE + "@femboyprime");
 
         return scoreboard;
     }
