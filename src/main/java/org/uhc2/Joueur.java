@@ -14,16 +14,16 @@ public class Joueur {
     private final Uhc2 main;
 
     // default stuff
-    public Player player;
-    public String username;
-    public UUID uuid;
-    public boolean mort = false;
-    public ScoreboardSign scoreboard = null;
+    private Player player;
+    private String username;
+    private UUID uuid;
+    private boolean mort = false;
+    private ScoreboardSign scoreboard = null;
 
     // lg global stuff
-    public camps camp;
-    public roles role = null;
-    public Joueur couple = null;
+    private camps camp;
+    private roles role = null;
+    private Joueur couple = null;
 
     public boolean canVote = true;
     public Joueur votedFor;
@@ -111,6 +111,8 @@ public class Joueur {
     }
 
     // "is" methods
+    public boolean isDead() {return (mort); }
+    public boolean isAlive() { return (!mort); }
     public boolean isLoup_Effect() {
         if (getRole()  == roles.LG_Blanc) {
             return true;
@@ -127,6 +129,6 @@ public class Joueur {
 
     // "has" methods
     public boolean hasCouple() {
-        return couple != null;
+        return (couple != null);
     }
 }

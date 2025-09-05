@@ -39,13 +39,13 @@ public class Pouvoirs {
     public void givePermanent(Joueur joueur) {
         Player player = joueur.getPlayer();
 
-        if (joueur.role == roles.Petite_Fille || joueur.role == roles.Voyante_Bavarde) {
+        if (joueur.getRole() == roles.Petite_Fille || joueur.getRole() == roles.Voyante_Bavarde) {
             giveEffect(joueur, nightvision);
-        } else if (joueur.role == roles.Pyromane) {
+        } else if (joueur.getRole() == roles.Pyromane) {
             PotionEffect fireresistance = new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 0, false, false);
 
             giveEffect(joueur, fireresistance);
-        } else if (joueur.role == roles.Ancien && !joueur.hasRespawned) {
+        } else if (joueur.getRole() == roles.Ancien && !joueur.hasRespawned) {
             PotionEffect resistance = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0, false, false);
 
             giveEffect(joueur, resistance);
@@ -53,7 +53,7 @@ public class Pouvoirs {
             Collection<PotionEffect> effects = Arrays.asList(force, nightvision);
             giveEffects(joueur, effects);
 
-            if (joueur.role == roles.LG_Blanc) {
+            if (joueur.getRole() == roles.LG_Blanc) {
                 player.setMaxHealth(40);
             }
         }
@@ -62,12 +62,12 @@ public class Pouvoirs {
     public void giveOneTime(Joueur joueur) {
         Player player = joueur.getPlayer();
 
-        if (joueur.role == roles.Petite_Fille) {
+        if (joueur.getRole() == roles.Petite_Fille) {
             //-// default minecraft potion
             ItemStack speed_1_8mn = new ItemStack(Material.POTION, 2, (short)8258);
             player.getInventory().addItem(speed_1_8mn);
 
-        } else if (joueur.role == roles.Sorciere) {
+        } else if (joueur.getRole() == roles.Sorciere) {
             //-// default minecraft potion
             ItemStack healPotion = new ItemStack(Material.POTION, 3, (short)16453);
             player.getInventory().addItem(healPotion);
@@ -88,14 +88,14 @@ public class Pouvoirs {
 
             // give item
             player.getInventory().addItem(regenPotion);
-        } else if (joueur.role == roles.Voyante_Bavarde) {
+        } else if (joueur.getRole() == roles.Voyante_Bavarde) {
             //-// default minecraft blocks
             ItemStack obsi = new ItemStack(Material.OBSIDIAN, 4);
             ItemStack biblio = new ItemStack(Material.BOOKSHELF, 4);
 
             player.getInventory().addItem(obsi);
             player.getInventory().addItem(biblio);
-        } else if (joueur.role == roles.Chasseur) {
+        } else if (joueur.getRole() == roles.Chasseur) {
             //-// default minecraft stuff
             // power 4
             ItemStack book = new ItemStack(Material.ENCHANTED_BOOK, 1);
@@ -119,18 +119,18 @@ public class Pouvoirs {
             ItemStack bones = new ItemStack(Material.BONE, 15);
 
             player.getInventory().addItem(bones);
-        } else if (joueur.role == roles.Salvateur) {
+        } else if (joueur.getRole() == roles.Salvateur) {
             //-// default minecraft potion
             ItemStack healPotion = new ItemStack(Material.POTION, 2, (short)16453);
             player.getInventory().addItem(healPotion);
-        } else if (joueur.role == roles.Ancien) {
+        } else if (joueur.getRole() == roles.Ancien) {
             ItemStack rod = new ItemStack(Material.FISHING_ROD, 1);
             ItemMeta rodMeta = rod.getItemMeta();
             rodMeta.addEnchant(Enchantment.LUCK, 5, true);
             rod.setItemMeta(rodMeta);
 
             player.getInventory().addItem(rod);
-        } else if (joueur.role == roles.Pyromane) {
+        } else if (joueur.getRole() == roles.Pyromane) {
             // fire aspect book
             ItemStack firebook = new ItemStack(Material.ENCHANTED_BOOK, 1);
             EnchantmentStorageMeta firebookMeta = (EnchantmentStorageMeta) firebook.getItemMeta();
@@ -163,8 +163,7 @@ public class Pouvoirs {
     }
 
     public void giveNight(Joueur joueur) {
-        Player player = joueur.getPlayer();
-        if (joueur.role == roles.Petite_Fille) {
+        if (joueur.getRole() == roles.Petite_Fille) {
             PotionEffect weakness = new PotionEffect(PotionEffectType.WEAKNESS, 12000, 0, false, false);
             PotionEffect invisibility = new PotionEffect(PotionEffectType.INVISIBILITY, 12000, 0, false, false);
 

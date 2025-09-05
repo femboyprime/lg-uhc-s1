@@ -11,7 +11,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.uhc2.events.eventsManager;
 import org.uhc2.enums.states;
 import org.uhc2.enums.roles;
-import org.uhc2.scoreboard.ScoreboardSign;
 
 import java.util.*;
 
@@ -138,21 +137,21 @@ public final class Uhc2 extends JavaPlugin {
                         //noinspection IfCanBeSwitch
                         if (gamemodeAsked.equals("1") || gamemodeAsked.equals("c")) {
                             player.setGameMode(GameMode.CREATIVE);
-                            player.sendMessage("§9[§6§lUHC§9]: Set gamemode to §cCREATIVE§9.");
+                            player.sendMessage(gameTag_Prive + "Set gamemode to §cCREATIVE§9.");
                         } else if (gamemodeAsked.equals("0") || gamemodeAsked.equals("s")) {
                             player.setGameMode(GameMode.SURVIVAL);
-                            player.sendMessage("§9[§6§lUHC§9]: Set gamemode to §cSURVIVAL§9.");
+                            player.sendMessage(gameTag_Prive + "Set gamemode to §cSURVIVAL§9.");
                         } else if (gamemodeAsked.equals("2") || gamemodeAsked.equals("a")) {
                             player.setGameMode(GameMode.ADVENTURE);
-                            player.sendMessage("§9[§6§lUHC§9]: Set gamemode to §cADVENTURE§9.");
+                            player.sendMessage(gameTag_Prive + "Set gamemode to §cADVENTURE§9.");
                         } else if (gamemodeAsked.equals("3") || gamemodeAsked.equals("sp")) {
                             player.setGameMode(GameMode.SPECTATOR);
-                            player.sendMessage("§9[§6§lUHC§9]: Set gamemode to §cSPECTATOR§9.");
+                            player.sendMessage(gameTag_Prive + "Set gamemode to §cSPECTATOR§9.");
                         }
 
                         return true;
                     } catch (ArrayIndexOutOfBoundsException exception) {
-                        player.sendMessage("§9[§6§lUHC§9]: Pas de gamemode donné.");
+                        player.sendMessage(gameTag_Prive + "Pas de gamemode donné.");
                         return true;
                     }
 
@@ -176,7 +175,7 @@ public final class Uhc2 extends JavaPlugin {
                         return true;
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         player.setHealth(player.getMaxHealth());
-                        player.sendMessage(gameTag_Public + "Healed yourself.");
+                        player.sendMessage(gameTag_Prive + "Healed yourself.");
                         return true;
                     }
                 } else if (commandName.equalsIgnoreCase("feed")) {
@@ -199,7 +198,7 @@ public final class Uhc2 extends JavaPlugin {
                         return true;
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         player.setFoodLevel(20);
-                        player.sendMessage(gameTag_Public + "Fed yourself.");
+                        player.sendMessage(gameTag_Prive + "Fed yourself.");
                         return true;
                     }
                 } else if (commandName.equalsIgnoreCase("startuhc")) {
@@ -221,53 +220,6 @@ public final class Uhc2 extends JavaPlugin {
                     }
 
                     return true;
-                    /*
-                } else if (commandName.equalsIgnoreCase("addrole")) {
-
-                    try {
-                        String roleToAdd = args[0];
-
-                        if (Arrays.asList(this.roles.rolesLG).contains(roleToAdd)) {
-                            composition.roleList.add(roleToAdd);
-                            player.sendMessage("§9[§6§lUHC§9]: Le rôle '§b" + roleToAdd + "§9' a bien été ajouté.");
-                        } else {
-                            player.sendMessage("§9[§6§lUHC§9]: Le rôle '§b" + roleToAdd + "§9' n'existe pas.");
-                        }
-
-                        return true;
-                    } catch (ArrayIndexOutOfBoundsException exception) {
-                        player.sendMessage("§9[§6§lUHC§9]: Pas de rôle donné.");
-                        return true;
-                    }
-                } else if (commandName.equalsIgnoreCase("removerole")) {
-                    try {
-                        String roleToAdd = args[0];
-
-                        if (composition.roleList.contains(roleToAdd)) {
-                            composition.roleList.remove(roleToAdd);
-                            player.sendMessage("§9[§6§lUHC§9]: Le rôle '§b" + roleToAdd + "§9' a bien été enlevé.");
-                        } else {
-                            player.sendMessage("§9[§6§lUHC§9]: '§b" + roleToAdd + "§9' n'est pas dans la composition.");
-                        }
-
-                        return true;
-                    } catch (ArrayIndexOutOfBoundsException exception) {
-                        player.sendMessage("§9[§6§lUHC§9]: Pas de rôle donné.");
-                        return true;
-                    }
-                } else if (commandName.equalsIgnoreCase("getroles")) {
-                    StringBuilder stringBuilder = new StringBuilder("§9[§6§lUHC§9]: Rôles present dans la parties: ");
-
-                    for (String role: composition.roleList) {
-                        stringBuilder.append(utils.getRoleColor(role)).append(role).append("§9, ");
-                    }
-
-                    String messageToSend = stringBuilder.substring(0, stringBuilder.toString().length() - 2); // -2 car on a ", " à la fin.
-
-                    player.sendMessage(messageToSend + "§9.");
-                    return true;
-
-                     */
                 } else if (commandName.equalsIgnoreCase("compo")) {
                     composition.entityOpenInventory(player);
                 } else if (commandName.equalsIgnoreCase("test")) {

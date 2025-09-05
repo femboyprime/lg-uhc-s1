@@ -50,7 +50,7 @@ public class Utils {
 
         main.cycleTimer = new Timer();
         main.cycleTimerTask = new TimerTask() {
-            final World world = (World) Bukkit.getServer().getWorld("world");
+            final World world = Bukkit.getServer().getWorld("world");
 
             @Override
             public void run() {
@@ -59,7 +59,7 @@ public class Utils {
                 if (main.cycle) {
                     for (Joueur joueur : main.joueurPlayer.keySet()) {
                         // set scoreboard
-                        joueur.scoreboard.setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Jour");
+                        joueur.getScoreboard().setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Jour");
 
                         // effets de jours
                         main.pouvoirs.giveDay(joueur);
@@ -73,7 +73,7 @@ public class Utils {
                 } else {
                     for (Joueur joueur : main.joueurPlayer.keySet()) {
                         // set scoreboard
-                        joueur.scoreboard.setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Nuit");
+                        joueur.getScoreboard().setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Nuit");
 
                         // effets de nuits
                         main.pouvoirs.giveNight(joueur);
@@ -113,7 +113,7 @@ public class Utils {
                 }
 
                 for (Joueur joueur : main.joueurPlayer.keySet()) {
-                    joueur.scoreboard.setLine(6, ChatColor.AQUA + "Episode " + ChatColor.GOLD + main.episodeInt);
+                    joueur.getScoreboard().setLine(6, ChatColor.AQUA + "Episode " + ChatColor.GOLD + main.episodeInt);
 
                 }
             }
@@ -137,7 +137,7 @@ public class Utils {
         main.cycleTimer.cancel();
 
         for (Joueur joueur : main.joueurPlayer.keySet()) {
-            joueur.scoreboard.destroy();
+            joueur.getScoreboard().destroy();
             joueur.getPlayer().setMaxHealth(20);
 
             for (PotionEffect effect : joueur.getPlayer().getActivePotionEffects()) {
@@ -159,7 +159,7 @@ public class Utils {
                     .skip(rng.nextInt(main.playerJoueur.size()))
                     .findFirst().get();
 
-            if (role.getNumber() > 0 && joueurToGive.role == null) {
+            if (role.getNumber() > 0 && joueurToGive.getRole() == null) {
                 role.setNumber(role.getNumber() - 1);
 
                 // set role & camp
@@ -300,7 +300,7 @@ public class Utils {
 
         int jrs = 0;
         for (Joueur joueur : main.joueurPlayer.keySet()) {
-            if (!joueur.mort) {
+            if (joueur.isDead()) {
                 jrs = jrs + 1;
             }
         }

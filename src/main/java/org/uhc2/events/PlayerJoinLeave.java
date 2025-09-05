@@ -30,7 +30,7 @@ public class PlayerJoinLeave implements Listener {
             }
 
             // scoreboardsign sauvegarde pas -> create a chaque fois x)
-            joueur.scoreboard.destroy();
+            joueur.getScoreboard().destroy();
             ScoreboardSign scoreboard = main.utils.makeScoreboard(player);
             joueur.setScoreboard(scoreboard);
 
