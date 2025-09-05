@@ -6,7 +6,7 @@
 
   <groupId>org</groupId>
   <artifactId>uhc2</artifactId>
-  <version>1.8.2</version>
+  <version>1.8.3</version>
   <packaging>jar</packaging>
 
   <name>uhc2</name>
