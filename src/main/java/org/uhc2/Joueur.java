@@ -111,7 +111,7 @@ public class Joueur {
     }
 
     // "is" methods
-    public boolean isDead() {return (mort); }
+    public boolean isDead() {return (!isAlive()); }
     public boolean isAlive() { return (!mort); }
     public boolean isLoup_Effect() {
         if (getRole()  == roles.LG_Blanc) {

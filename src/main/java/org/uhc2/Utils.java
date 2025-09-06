@@ -181,6 +181,7 @@ public class Utils {
 
                 // envoie les messages
                 joueurToGive.sendMessage(new String[]{main.gameTag_Prive + "Vous êtes " + role.getStrColor() + role.getName() + "§9.", role.getDescription()});
+
             }
 
 

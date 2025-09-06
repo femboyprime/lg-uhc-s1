@@ -6,11 +6,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.uhc2.events.eventsManager;
 import org.uhc2.enums.states;
 import org.uhc2.enums.roles;
+
+import org.uhc2.commands.lg;
+import org.uhc2.commands.test;
+import org.uhc2.commands.startuhc;
+import org.uhc2.commands.stopuhc;
+import org.uhc2.commands.compo;
+import org.uhc2.commands.heal;
+import org.uhc2.commands.feed;
 
 import java.util.*;
 
@@ -94,9 +100,17 @@ public final class Uhc2 extends JavaPlugin {
         // Plugin startup vars
         state = states.WAITING;
 
+        // register commands
+        this.getCommand("startuhc").setExecutor(new startuhc(this));
+        this.getCommand("stopuhc").setExecutor(new stopuhc(this));
+        this.getCommand("compo").setExecutor(new compo(this));
+        this.getCommand("heal").setExecutor(new heal(this));
+        this.getCommand("feed").setExecutor(new feed(this));
+        this.getCommand("test").setExecutor(new test(this));
+        this.getCommand("lg").setExecutor(new lg(this));
+
         // les descriptions
         // roles.ROLE.description = _text + "Votre objectif est d'éliminer les " + _loupgarou + "Loups-Garous" + _text + ". ";
-
         roles.Petite_Fille.setDescription(_text + "Votre objectif est d'éliminer les " + _loupgarou + "Loups-Garous" + _text + ". Vous disposez de l'effet " + _nv + "Night Vision" + _text + " en permanence, ainsi que des effets " + _inv + "Invisibility I" + _text + " et " + _wk + "Weakness I" + _text + " la nuit. Vous disposez également de 2 potions de " + _sp + "Speed I" + _text + ". Au crépuscule et au milieu de la nuit, vous connaîtrez les pseudos des joueurs situés dans un rayon de 100 blocks autour de vous.");
         roles.Sorciere.setDescription(_text + "Votre objectif est d'éliminer les " + _loupgarou + "Loups-Garous" + _text + ". Pour ce faire, vous disposez de 3 potions splash d'"+_ih+"Instant Health I"+_text+", d'une potion splash de "+_rg+"Regeneration I"+_text+" et de 3 potions splash d'"+_id+"Instant Damage I"+_text+". Vous avez le pouvoir de ressuciter un joueur une fois dans la partie, à l'aide de la commande "+_cmd+"/lg sauver <pseudo>"+_text+".");
         roles.Voyante_Bavarde.setDescription(_text + "Votre objectif est d'éliminer les " + _loupgarou + "Loups-Garous" + _text + ". Vous disposez de l'effet " + _nv + "Night Vision" + _text + ", de 4 bibliothèques et de 4 blocks d'obsidienne. A chaque début de journée, vous pourrez connaître le rôle d'un joueur à l'aide de la commande "+_cmd+"/lg voir <pseudo>"+_text+".");
@@ -111,206 +125,8 @@ public final class Uhc2 extends JavaPlugin {
 
         roles.LG_Simple.setDescription(_text + "Votre objectif est d'éliminer les " + _villageois + "Villageois" + _text + ". Pour ce faire, vous disposez des effets " + _fr + "Strength I" + _text + " et " + _nv + "Night Vision" + _text + ". A chaque kill, vous gagnez 1 minute de "+_sp+"Speed" + _text + " et 4 coeurs d'"+_abs+"Absorption" + _text + " pendant 4 minutes.");
         roles.LG_Blanc.setDescription(_text + "Votre objectif est de gagner " + _solo + "seul" + _text + ". Pour ce faire, vous disposez des effets " + _fr + "Strength I" + _text + " et " + _nv + "Night Vision" + _text + ", ainsi que d'une deuxième barre de vie. A chaque kill, vous gagnez 1 minute de "+_sp+"Speed" + _text + " et 4 coeurs d'"+_abs+"Absorption" + _text + " pendant 4 minutes.");
-
     }
 
     @Override
     public void onDisable() {}
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-
-            boolean isOwner = player.getUniqueId().toString().equals("0fc289a2-8dda-429a-b727-7f1e9811d747");
-            // boolean isHost = true;
-
-            String commandName = command.getName();
-
-            if (isOwner) {
-                // les commandes pour les hosts / owner
-
-                if (commandName.equalsIgnoreCase("gm")) {
-                    try {
-                        String gamemodeAsked = args[0];
-
-                        //noinspection IfCanBeSwitch
-                        if (gamemodeAsked.equals("1") || gamemodeAsked.equals("c")) {
-                            player.setGameMode(GameMode.CREATIVE);
-                            player.sendMessage(gameTag_Prive + "Set gamemode to §cCREATIVE§9.");
-                        } else if (gamemodeAsked.equals("0") || gamemodeAsked.equals("s")) {
-                            player.setGameMode(GameMode.SURVIVAL);
-                            player.sendMessage(gameTag_Prive + "Set gamemode to §cSURVIVAL§9.");
-                        } else if (gamemodeAsked.equals("2") || gamemodeAsked.equals("a")) {
-                            player.setGameMode(GameMode.ADVENTURE);
-                            player.sendMessage(gameTag_Prive + "Set gamemode to §cADVENTURE§9.");
-                        } else if (gamemodeAsked.equals("3") || gamemodeAsked.equals("sp")) {
-                            player.setGameMode(GameMode.SPECTATOR);
-                            player.sendMessage(gameTag_Prive + "Set gamemode to §cSPECTATOR§9.");
-                        }
-
-                        return true;
-                    } catch (ArrayIndexOutOfBoundsException exception) {
-                        player.sendMessage(gameTag_Prive + "Pas de gamemode donné.");
-                        return true;
-                    }
-
-                } else if (commandName.equalsIgnoreCase("heal")) {
-                    try {
-                        String playerName = args[0];
-                        Player player1 = Bukkit.getPlayer(playerName);
-
-                        if (player1 == null) {
-                            player.sendMessage(gameTag_Public + "Le joueur '§b" + playerName + "'§9 n'existe pas.");
-                            return true;
-                        }
-
-                        player1.setHealth(player1.getMaxHealth());
-                        player.sendMessage(gameTag_Public + "Successfully healed '§b" +  playerName + "'§9.");
-
-                        if (! (player1 == player)) {
-                            player1.sendMessage(gameTag_Prive + "You were healed by '§b" +  player.getName() + "§9'.");
-                        }
-
-                        return true;
-                    } catch (ArrayIndexOutOfBoundsException exception) {
-                        player.setHealth(player.getMaxHealth());
-                        player.sendMessage(gameTag_Prive + "Healed yourself.");
-                        return true;
-                    }
-                } else if (commandName.equalsIgnoreCase("feed")) {
-                    try {
-                        String playerName = args[0];
-                        Player player1 = Bukkit.getPlayer(playerName);
-
-                        if (player1 == null) {
-                            player.sendMessage(gameTag_Public + "Le joueur '§b" + playerName + "§9' n'existe pas.");
-                            return true;
-                        }
-
-                        player1.setFoodLevel(20);
-                        player.sendMessage(gameTag_Public + "Successfully fed '§b" +  playerName + "§9'.");
-
-                        if (! (player1 == player)) {
-                            player1.sendMessage(gameTag_Prive + "§You were fed by '§b" +  player.getName() + "§9'.");
-                        }
-
-                        return true;
-                    } catch (ArrayIndexOutOfBoundsException exception) {
-                        player.setFoodLevel(20);
-                        player.sendMessage(gameTag_Prive + "Fed yourself.");
-                        return true;
-                    }
-                } else if (commandName.equalsIgnoreCase("startuhc")) {
-                    if ( !(state == states.WAITING) ) {
-                        player.sendMessage(gameTag_Public + "l'UHC a déjà commencé.");
-                        return true;
-                    }
-
-                    utils.timerResume();
-                    return true;
-                } else if (commandName.equalsIgnoreCase("stopuhc")) {
-
-                    if (state == states.WAITING) {
-                        player.sendMessage(gameTag_Public + "l'UHC n'a pas encore commencé.");
-                    } else if (state == states.STARTING) {
-                        utils.timerPause();
-                    } else {
-                        utils.stopGame();
-                    }
-
-                    return true;
-                } else if (commandName.equalsIgnoreCase("compo")) {
-                    composition.entityOpenInventory(player);
-                } else if (commandName.equalsIgnoreCase("test")) {
-                    if (!utils.isPlayerJoueur(player)) {
-                        player.sendMessage(ChatColor.RED + "rien à test, sorry ! -femboyprime"); //
-                    } else {
-                        Joueur joueur = utils.getJoueur(player);
-
-                        pouvoirs.giveEffect(joueur, pouvoirs.lg_speed);
-                        pouvoirs.giveEffect(joueur, pouvoirs.lg_abso);
-                    }
-
-                    return true;
-                } else if (commandName.equalsIgnoreCase("lg")) {
-                    Joueur joueur = utils.getJoueur(player);
-
-                    try {
-                        // main cmd
-                        String sousCommande = args[0];
-                        utils.sendMessageToAll("sousCommande: " + sousCommande);
-
-                        if (sousCommande.equalsIgnoreCase("voir")) {
-                            // voir cmd -> voyante_bavarde
-                            try {
-                                String playerName = args[1];
-                                Player target = Bukkit.getPlayer(playerName);
-
-                                if (target != null && utils.isPlayerJoueur(target)) {
-                                    Joueur targetJoueur = utils.getJoueur(target);
-
-                                    if (targetJoueur != null && joueur.getRole() == roles.Voyante_Bavarde) {
-                                        if (!joueur.hasSeen) {
-                                            joueur.hasSeen = true;
-
-                                            utils.sendMessageToAll(gameTag_Public + "La " + _villageois + "Voyante Bavarde" + _text + " a espionné un joueur et son rôle est : " + targetJoueur.getRole().getStrColor() + targetJoueur.getRole().getName() + _text + ".");
-                                        } else {
-                                            joueur.sendMessage(gameTag_Prive + "Vous avez déjà regardé le rôle d'un joueur cette épisode.");
-                                        }
-
-                                    }
-                                }
-                            } catch (Exception ignored) {}
-
-                            return true;
-                        } else if (sousCommande.equalsIgnoreCase("salvater")) {
-                            // salvater cmd -> salvateur
-                            try {
-                                String playerName = args[1];
-                                Player target = Bukkit.getPlayer(playerName);
-
-                                if (target != null && utils.isPlayerJoueur(target)) {
-                                    Joueur targetJoueur = utils.getJoueur(target);
-
-                                    if (targetJoueur != null && joueur.getRole() == roles.Salvateur) {
-                                        if (!joueur.hasProtected) {
-                                            if (joueur.lastProtected != target) {
-                                                joueur.hasProtected = true;
-                                                joueur.lastProtected = target;
-                                                targetJoueur.isProtected = true;
-
-                                                PotionEffect resistance = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, (timeForEpisode / 50), 0, false, false);
-                                                pouvoirs.giveEffect(targetJoueur, resistance);
-
-                                                targetJoueur.sendMessage(gameTag_Prive + "Le "+_villageois+"Salvateur"+_text+" vous a salvaté! Vous disposez de l'effet "+_res+"Resistance"+_text+" ainsi que "+_res+"NoFall"+_text+" pendant cette épisode.");
-
-                                            } else {
-                                                joueur.sendMessage(gameTag_Prive + "Vous avez déjà salvaté le joueur l'épisode d'avant.");
-                                            }
-                                        } else {
-                                            joueur.sendMessage(gameTag_Prive + "Vous avez déjà salvaté un joueur cette épisode.");
-                                        }
-
-                                    }
-                                }
-                            } catch (Exception ignored) {}
-                        }
-
-                        return true;
-                    } catch (Exception ignored) {}
-
-                    return true;
-                }
-
-            } else {
-                player.sendMessage(gameTag_Public + "You do §cnot have"+_text+" permission to run this command.");
-                return true;
-
-            }
-
-        }
-        return true; // j'ai oublié :(
-    }
-
 }
