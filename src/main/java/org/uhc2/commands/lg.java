@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -11,7 +12,11 @@ import org.uhc2.Joueur;
 import org.uhc2.Uhc2;
 import org.uhc2.enums.roles;
 
-public class lg implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class lg implements CommandExecutor, TabExecutor {
     private final Uhc2 main;
     public lg(Uhc2 main) { this.main = main; }
 
@@ -19,22 +24,8 @@ public class lg implements CommandExecutor {
     // color strings
     public String _text = "§9";
     public String _villageois = "§a";
-    public String _loupgarou = "§c";
-    public String _solo = "§6";
-    public String _cmd = "§f";
 
-    public String _nv = "§1";
-    public String _fr = "§c";
-    public String _sp = "§f";
-    public String _abs = "§e";
-    public String _inv = "§7";
-    public String _wk = "§8";
-    public String _ih = "§d";
-    public String _id = "§4";
-    public String _rg = "§5";
     public String _res = "§7";
-    public String _nf = "§7";
-    public String _fres = "§6";
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -115,5 +106,28 @@ public class lg implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+        if (args.length == 1) {
+            List<String> arguments = new ArrayList<>();
+            arguments.add("voir");
+            arguments.add("salvater");
+            arguments.add("me");
+            arguments.add("role");
+
+            return arguments;
+        } else if (args.length == 2) {
+            List<String> playerNames = new ArrayList<>();
+
+            for (Joueur joueur : main.joueurPlayer.keySet()) {
+                playerNames.add(joueur.getName());
+            }
+
+            return playerNames;
+        }
+
+       return Collections.emptyList();
     }
 }

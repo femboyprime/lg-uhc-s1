@@ -10,8 +10,6 @@ import org.uhc2.Joueur;
 import org.uhc2.Uhc2;
 import org.uhc2.enums.roles;
 
-import java.util.UUID;
-
 public class PlayerDeath implements Listener {
     private final Uhc2 main;
     public PlayerDeath(Uhc2 main) { this.main = main; }
@@ -31,7 +29,7 @@ public class PlayerDeath implements Listener {
 
         int jrs = 0;
         for (Joueur joueur : main.joueurPlayer.keySet()) {
-            if (!joueur.isDead()) {
+            if (joueur.isAlive()) {
                 jrs = jrs + 1;
 
                 // nique sa race x)

@@ -301,13 +301,13 @@ public class Utils {
 
         int jrs = 0;
         for (Joueur joueur : main.joueurPlayer.keySet()) {
-            if (joueur.isDead()) {
+            if (joueur.isAlive()) {
                 jrs = jrs + 1;
             }
         }
 
         scoreboard.setLine(5," ");
-        scoreboard.setLine(6, ChatColor.AQUA + "Episode " + ChatColor.GOLD + "1");
+        scoreboard.setLine(6, ChatColor.AQUA + "Episode " + ChatColor.GOLD + main.episodeInt);
         scoreboard.setLine(7, ChatColor.RED + "" + jrs + ChatColor.DARK_RED + " Joueurs");
         scoreboard.setLine(8, "  ");
         scoreboard.setLine(9, ChatColor.GOLD + "Timer: " + ChatColor.YELLOW + "00:00");
