@@ -64,8 +64,6 @@ public class PlayerDeath implements Listener {
                         _kill(player, joueurMort);
                     }
                 }
-
-                joueurMort.hasRespawned = true;
             } else {
                 _kill(player, joueurMort);
             }
