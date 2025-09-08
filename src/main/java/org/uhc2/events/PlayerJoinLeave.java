@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.potion.PotionEffect;
 import org.uhc2.Joueur;
 import org.uhc2.Uhc2;
 import org.uhc2.enums.roles;
@@ -40,16 +41,22 @@ public class PlayerJoinLeave implements Listener {
             joueur.setName();
 
         } else {
+            // 10c
             player.setMaxHealth(20);
+
+            // no effect :)
+            for (PotionEffect effect : player.getActivePotionEffects()) {
+                player.removePotionEffect(effect.getType());
+            }
         }
 
-        event.setJoinMessage(ChatColor.AQUA + "[" + ChatColor.GREEN + "+" + ChatColor.AQUA + "] " + ChatColor.DARK_AQUA + ChatColor.BOLD + player.getName() + ChatColor.RESET + ChatColor.DARK_AQUA + " a rejoint le serveur! " + ChatColor.WHITE + "(" + ChatColor.AQUA + Bukkit.getOnlinePlayers().size() + ChatColor.WHITE + "/" + ChatColor.AQUA + Bukkit.getMaxPlayers() + ChatColor.WHITE + ")");
+        event.setJoinMessage(ChatColor.DARK_GRAY + "[" + ChatColor.GREEN + "»" + ChatColor.DARK_GRAY + "] " + ChatColor.YELLOW + ChatColor.BOLD + player.getName() + ChatColor.RESET + ChatColor.WHITE + " (" + ChatColor.GREEN + Bukkit.getOnlinePlayers().size() + ChatColor.WHITE + "/" + ChatColor.RED + Bukkit.getMaxPlayers() + ChatColor.WHITE + ")");
     }
 
     @EventHandler
     public void OnPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        event.setQuitMessage(ChatColor.AQUA + "[" + ChatColor.RED + "-" + ChatColor.AQUA + "] " + ChatColor.DARK_AQUA + ChatColor.BOLD + player.getName() + ChatColor.RESET + ChatColor.DARK_AQUA + " a quitté le serveur! " + ChatColor.WHITE + "(" + ChatColor.AQUA + Bukkit.getOnlinePlayers().size() + ChatColor.WHITE + "/" + ChatColor.AQUA + Bukkit.getMaxPlayers() + ChatColor.WHITE + ")");
+        event.setQuitMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "«" + ChatColor.DARK_GRAY + "] " + ChatColor.YELLOW + ChatColor.BOLD + player.getName() + ChatColor.RESET + ChatColor.WHITE + " (" + ChatColor.GREEN + Bukkit.getOnlinePlayers().size() + ChatColor.WHITE + "/" + ChatColor.RED + Bukkit.getMaxPlayers() + ChatColor.WHITE + ")");
     }
 }

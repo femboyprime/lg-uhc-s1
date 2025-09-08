@@ -51,7 +51,7 @@ public class lg implements CommandExecutor, TabExecutor {
 
                                     main.utils.sendMessageToAll(main.gameTag_Public + "La " + _villageois + "Voyante Bavarde" + _text + " a espionné un joueur et son rôle est : " + targetJoueur.getRole().getStrColor() + targetJoueur.getRole().getName() + _text + ".");
                                 } else {
-                                    joueur.sendMessage(main.gameTag_Prive + "Vous avez déjà regardé le rôle d'un joueur cette épisode.");
+                                    joueur.sendMessage("Vous avez déjà regardé le rôle d'un joueur cette épisode.");
                                 }
 
                             }
@@ -75,13 +75,13 @@ public class lg implements CommandExecutor, TabExecutor {
                                         PotionEffect resistance = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, (main.timeForEpisode / 50), 0, false, false);
                                         main.pouvoirs.giveEffect(targetJoueur, resistance);
 
-                                        targetJoueur.sendMessage(main.gameTag_Prive + "Le "+_villageois+"Salvateur"+_text+" vous a salvaté! Vous disposez de l'effet "+_res+"Resistance"+_text+" ainsi que "+_res+"NoFall"+_text+" pendant cette épisode.");
+                                        targetJoueur.sendMessage("Le "+_villageois+"Salvateur"+_text+" vous a salvaté! Vous disposez de l'effet "+_res+"Resistance"+_text+" ainsi que "+_res+"NoFall"+_text+" pendant cette épisode.");
 
                                     } else {
-                                        joueur.sendMessage(main.gameTag_Prive + "Vous avez déjà salvaté le joueur l'épisode d'avant.");
+                                        joueur.sendMessage("Vous avez déjà salvaté le joueur l'épisode d'avant.");
                                     }
                                 } else {
-                                    joueur.sendMessage(main.gameTag_Prive + "Vous avez déjà salvaté un joueur cette épisode.");
+                                    joueur.sendMessage("Vous avez déjà salvaté un joueur cette épisode.");
                                 }
 
                             }

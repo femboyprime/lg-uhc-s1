@@ -1,6 +1,7 @@
 package org.uhc2.events;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +15,24 @@ public class PlayerDeath implements Listener {
     private final Uhc2 main;
     public PlayerDeath(Uhc2 main) { this.main = main; }
 
+    // color strings
+    public String _text = "§9";
+    public String _loupgarou = "§c";
+
+    public String _res = "§7";
+
+    private void _respawn(Player player, Joueur joueurMort) {
+        if (joueurMort.getRole() == roles.Ancien) {
+            joueurMort.sendMessage("Vous avez été tué par un "+_loupgarou+"Loup-Garou"+_text+"! Vous ressuscitez mais perdez votre effet de "+_res+"résistance"+_text+".");
+        }
+
+        Location respawnLocation = new Location(player.getWorld(), -874.5, 19, -384.5); // MAKE RANDOM
+        joueurMort.hasRespawned = true;
+
+        player.spigot().respawn();
+        player.teleport(respawnLocation);
+    }
+
     private void _kill(Player player, Joueur joueurMort) {
         joueurMort.setMort(true); // CIAAAAAAAAOOOOOO !!!
 
@@ -22,7 +41,6 @@ public class PlayerDeath implements Listener {
             Joueur joueurKiller = main.utils.getJoueur(killer);
 
             if (joueurKiller.getUUID().toString().equals(killer.getUniqueId().toString()) && joueurKiller.isLoup_Effect() ) {
-                main.utils.sendMessageToAll("GAVE OUT lg_kill_effects !!");
                 main.pouvoirs.giveEffects(joueurKiller, main.pouvoirs.lg_kill_effects);
             }
         }
@@ -49,27 +67,35 @@ public class PlayerDeath implements Listener {
 
         if (isPlaying && main.episodeInt >= 2) {
             event.setDeathMessage(null);
-            event.setKeepInventory(false);
 
             Joueur joueurMort = main.utils.getJoueur(player);
 
             if (joueurMort.getRole() == roles.Ancien && !joueurMort.hasRespawned) {
-                if (player.getKiller().getType() == EntityType.PLAYER && main.utils.isPlayerJoueur(player.getKiller())) {
+                if (player.getKiller() != null && player.getKiller().getType() == EntityType.PLAYER && main.utils.isPlayerJoueur(player.getKiller())) {
                     Player killer = player.getKiller();
                     Joueur joueurKiller = main.utils.getJoueur(killer);
 
-                    if (joueurKiller.isLoup_Effect()) {
-                        joueurMort.hasRespawned = true;
+                    if (joueurKiller.isLoup_Kill()) {
+                        event.setKeepInventory(true);
+                        _respawn(player, joueurMort);
+
                     } else {
+                        event.setKeepInventory(false);
                         _kill(player, joueurMort);
                     }
+                } else {
+                    event.setKeepInventory(false);
+                    _kill(player, joueurMort);
                 }
+
+
             } else {
+                event.setKeepInventory(false);
                 _kill(player, joueurMort);
             }
         } else {
             event.setDeathMessage("§b[§c☠§b] §3§l" + player.getName() + "§r§3 est mort.");
-            event.setKeepInventory(false);
+            event.setKeepInventory(true);
         }
 
     }

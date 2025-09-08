@@ -103,7 +103,7 @@ public class Joueur {
 
     // quicker methods
     public void sendMessage(String message) {
-        getPlayer().sendMessage(message);
+        getPlayer().sendMessage(main.gameTag_Prive + message);
     }
 
     public void sendMessage(String[] messages) {
@@ -111,6 +111,9 @@ public class Joueur {
     }
 
     // "is" methods
+    public boolean isOwner() {
+        return (getUUID().toString().equals("0fc289a2-8dda-429a-b727-7f1e9811d747"));
+    }
     public boolean isDead() {return (!isAlive()); }
     public boolean isAlive() { return (!mort); }
     public boolean isLoup_Effect() {
@@ -121,6 +124,20 @@ public class Joueur {
         } else if (getRole() == roles.Enfant_Sauvage && isTransfo) {
             return true;
         } else if (getCamp() == camps.LoupGarou) { //-// omg l'infection (ya pas en saison 1 ...)
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isLoup_Kill() {
+        if (getRole()  == roles.LG_Blanc) {
+            return true;
+        } else if (getRole()  == roles.LG_Simple) {
+            return true;
+        } else if (getRole() == roles.Enfant_Sauvage && isTransfo) {
+            return true;
+        } else if (getCamp() == camps.LoupGarou) {
             return true;
         } else {
             return false;

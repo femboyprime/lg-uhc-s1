@@ -7,14 +7,14 @@ public enum roles {
     Voyante_Bavarde("Voyante Bavarde",      camps.Village, 0, "§a", 10),
     Chasseur("Chasseur",                    camps.Village, 0, "§a", 10),
     Salvateur("Salvateur",                  camps.Village, 0, "§a", 10),
-    Ancien("Ancien",                        camps.Village, 0, "§a", 10),
+    Ancien("Ancien",                        camps.Village, 1, "§a", 10),
     Pyromane("Pyromane",                    camps.Village, 0, "§a", 10),
     Chaman("Chaman",                        camps.Village, 0, "§a", 10),
     Simple_Villageois("Simple Villageois",  camps.Village, 0, "§a", 10),
 
     Enfant_Sauvage("Enfant Sauvage",        camps.Village, 0, "§5", 5),
 
-    LG_Simple("Loup-Garou",                 camps.LoupGarou, 1, "§c", 1),
+    LG_Simple("Loup-Garou",                 camps.LoupGarou, 0, "§c", 1),
     LG_Blanc("Loup-Garou Blanc",            camps.Neutre, 0, "§6", 14);
 
     private final String nom;
