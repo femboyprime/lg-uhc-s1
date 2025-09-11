@@ -18,6 +18,7 @@ public class PlayerDeath implements Listener {
     // color strings
     public String _text = "§9";
     public String _loupgarou = "§c";
+    public String _villageois = "§a";
 
     public String _res = "§7";
 
@@ -70,16 +71,22 @@ public class PlayerDeath implements Listener {
 
             Joueur joueurMort = main.utils.getJoueur(player);
 
+            // l'ancien est mort
             if (joueurMort.getRole() == roles.Ancien && !joueurMort.hasRespawned) {
+                // l'ancien se fait tuer par qqn
                 if (player.getKiller() != null && player.getKiller().getType() == EntityType.PLAYER && main.utils.isPlayerJoueur(player.getKiller())) {
                     Player killer = player.getKiller();
                     Joueur joueurKiller = main.utils.getJoueur(killer);
 
+                    // si l'ancien est mort par un lg
                     if (joueurKiller.isLoup_Kill()) {
                         event.setKeepInventory(true);
                         _respawn(player, joueurMort);
-
                     } else {
+                        // aussinon x) (sur les prochaines saisons -> check si le type est solo ou non)
+                        killer.setHealth((killer.getHealth() / 2));
+                        joueurKiller.sendMessage("Vous avez tué l'"+_villageois+"Ancien"+_text+", vous perdez donc la moitié de votre vie effective.");
+
                         event.setKeepInventory(false);
                         _kill(player, joueurMort);
                     }
@@ -87,8 +94,6 @@ public class PlayerDeath implements Listener {
                     event.setKeepInventory(false);
                     _kill(player, joueurMort);
                 }
-
-
             } else {
                 event.setKeepInventory(false);
                 _kill(player, joueurMort);

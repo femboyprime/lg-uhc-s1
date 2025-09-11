@@ -7,6 +7,7 @@ import org.uhc2.events.eventsManager;
 import org.uhc2.enums.states;
 import org.uhc2.enums.roles;
 
+import org.uhc2.commands.gm;
 import org.uhc2.commands.lg;
 import org.uhc2.commands.test;
 import org.uhc2.commands.startuhc;
@@ -109,6 +110,7 @@ public final class Uhc2 extends JavaPlugin {
         this.getCommand("feed").setExecutor(new feed(this));
         this.getCommand("test").setExecutor(new test(this));
         this.getCommand("lg").setExecutor(new lg(this));
+        this.getCommand("gm").setExecutor(new gm(this));
 
         // les descriptions
         // roles.ROLE.description = _text + "Votre objectif est d'éliminer les " + _loupgarou + "Loups-Garous" + _text + ". ";

@@ -114,6 +114,8 @@ public class Joueur {
     public boolean isOwner() {
         return (getUUID().toString().equals("0fc289a2-8dda-429a-b727-7f1e9811d747"));
     }
+
+    public boolean isCouple() {return hasCouple(); }
     public boolean isDead() {return (!isAlive()); }
     public boolean isAlive() { return (!mort); }
     public boolean isLoup_Effect() {
