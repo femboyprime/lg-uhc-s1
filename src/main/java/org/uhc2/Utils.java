@@ -57,6 +57,7 @@ public class Utils {
                 main.cycle = !main.cycle;
 
                 if (main.cycle) {
+                    sendMessageToAll("§6§l☀ LE JOUR SE LEVE ☀"); // j'ai prit trop de temps pour chercher les unicodes
                     for (Joueur joueur : main.joueurPlayer.keySet()) {
                         // set scoreboard
                         joueur.getScoreboard().setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Jour");
@@ -71,6 +72,7 @@ public class Utils {
                     }
 
                 } else {
+                    sendMessageToAll("§9§l☾ LA NUIT TOMBE ☽"); // j'ai prit trop de temps pour chercher les unicodes
                     for (Joueur joueur : main.joueurPlayer.keySet()) {
                         // set scoreboard
                         joueur.getScoreboard().setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Nuit");
@@ -147,6 +149,28 @@ public class Utils {
 
         main.joueurPlayer.clear();
         main.playerJoueur.clear();
+    }
+
+    public boolean endGame() {
+        boolean shouldEndGame = true; // oui bon, nique sa race :) (23:00 un lundi)
+        camps aliveCamp = null; // rien pour l'instant
+
+        for (Joueur joueur : main.joueurPlayer.keySet()) {
+            if (joueur.isAlive()) {
+
+                if (aliveCamp == null) {
+                    aliveCamp = joueur.getCamp(); // le 1er camps d'un type vivant (et oui jamy)
+
+                } else if (aliveCamp != joueur.getCamp()) { // si le camp du 1er type vivant est diff du 1er type, alors personne n'a win :)
+                    shouldEndGame = false;
+                    break;
+
+                }
+
+            }
+        }
+
+        return shouldEndGame;
     }
 
     public void giveRoles() {
@@ -238,8 +262,6 @@ public class Utils {
         for (roles role : roles.values()) {
             nombreRoles = nombreRoles + role.getNumber();
         }
-
-        sendMessageToAll("nombreRoles: " + nombreRoles + " // getOnlinePlayers(): " + Bukkit.getOnlinePlayers().size());
 
         if (nombreRoles != Bukkit.getOnlinePlayers().size()) {
             if (nombreRoles > Bukkit.getOnlinePlayers().size()) {

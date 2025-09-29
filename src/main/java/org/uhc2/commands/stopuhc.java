@@ -23,8 +23,6 @@ public class stopuhc implements CommandExecutor {
             } else {
                 main.utils.stopGame();
             }
-
-            main.utils.timerResume();
         }
 
         return true;
