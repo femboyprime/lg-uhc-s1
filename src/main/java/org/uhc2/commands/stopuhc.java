@@ -21,7 +21,7 @@ public class stopuhc implements CommandExecutor {
             } else if (main.state == states.STARTING) {
                 main.utils.timerPause();
             } else {
-                main.utils.stopGame();
+                main.utils.stopGame(true);
             }
         }
 

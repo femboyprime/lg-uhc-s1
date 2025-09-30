@@ -10,6 +10,7 @@ import org.uhc2.enums.camps;
 import org.uhc2.enums.roles;
 import org.uhc2.enums.states;
 
+import org.uhc2.returnTypes.winResult;
 import org.uhc2.scoreboard.ScoreboardSign;
 
 import java.util.*;
@@ -124,15 +125,17 @@ public class Utils {
         main.episodeTimer.scheduleAtFixedRate(main.episodeTimerTask, Calendar.getInstance().getTime(), main.timeForEpisode); // 1200000 = 20 min
     }
 
-    public void stopGame() {
+    public void stopGame(boolean showMessage) {
         main.state = states.WAITING;
 
         main.episodeInt = 0;
         main.mainTimerInt = 0;
         main.cycle = false;
 
-        sendTitleToAll("§cArrêt de l'§6UHC§c.", "§4le /stopuhc");
-        sendMessageToAll("§cArrêt de l'§6UHC§c.");
+        if (showMessage) {
+            sendTitleToAll("§cArrêt de l'§6UHC§c.", "§4le /stopuhc");
+            sendMessageToAll("§cArrêt de l'§6UHC§c.");
+        }
 
         main.mainTimer.cancel();
         main.episodeTimer.cancel();
@@ -151,9 +154,10 @@ public class Utils {
         main.playerJoueur.clear();
     }
 
-    public boolean endGame() {
+    public winResult endGame() {
         boolean shouldEndGame = true; // oui bon, nique sa race :) (23:00 un lundi)
         camps aliveCamp = null; // rien pour l'instant
+        String winMessage = "N/A"; // rien aussi
 
         for (Joueur joueur : main.joueurPlayer.keySet()) {
             if (joueur.isAlive()) {
@@ -170,7 +174,23 @@ public class Utils {
             }
         }
 
-        return shouldEndGame;
+        // ceci est bien, nan ?
+        if (shouldEndGame && aliveCamp != null) {
+            switch (aliveCamp) {
+                case Couple:
+                    winMessage = "§f§lLe §dCouple§f a gagné !";
+                case Neutre:
+                    winMessage = "§f§lUn §6solitaire§f a gagné !";
+                case LoupGarou:
+                    winMessage = "§f§lLes §cLoups-Garous§f ont gagné !";
+                case Village:
+                    winMessage = "§f§lLe §avillage§f a gagné !";
+                default:
+                    winMessage = "bug ? (switch -> default?)";
+            }
+        }
+
+        return new winResult(shouldEndGame, winMessage, aliveCamp);
     }
 
     public void giveRoles() {
@@ -194,7 +214,7 @@ public class Utils {
                 main.pouvoirs.givePermanent(joueurToGive);
                 main.pouvoirs.giveOneTime(joueurToGive);
 
-                // petit sounds
+                // petit sound
                 if (role.getCamp() == camps.Village) {
                     playSound(joueurToGive, Sound.VILLAGER_IDLE);
                 } else if (role.getCamp() == camps.LoupGarou) {

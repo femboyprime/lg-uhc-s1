@@ -2,6 +2,7 @@ package org.uhc2.events;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,7 +10,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.uhc2.Joueur;
 import org.uhc2.Uhc2;
+import org.uhc2.enums.camps;
 import org.uhc2.enums.roles;
+import org.uhc2.returnTypes.winResult;
+
+import java.util.Objects;
 
 public class PlayerDeath implements Listener {
     private final Uhc2 main;
@@ -97,6 +102,32 @@ public class PlayerDeath implements Listener {
             } else {
                 event.setKeepInventory(false);
                 _kill(player, joueurMort);
+            }
+
+            // fin de game
+            winResult result = main.utils.endGame();
+
+            if (result.isWin() && result.getCamp() != null) {
+                camps winCamp = result.getCamp();
+                String winMessage = result.getWinMessage();
+
+                // on stop la game, sans montrer le message (oui faut que je change pour les kills & pseudo mais flm)
+                main.utils.stopGame(false);
+
+                // on envoie les gagnants
+                main.utils.sendTitleToAll("§6FIN DE GAME", "§eGG");
+                main.utils.sendMessageToAll(winMessage);
+
+                // on joue un petit sound
+                if (winCamp == camps.Village) {
+                    main.utils.playSoundToAll(Sound.VILLAGER_IDLE);
+                } else if (winCamp == camps.LoupGarou) {
+                    main.utils.playSoundToAll(Sound.WOLF_GROWL);
+                } else if (winCamp == camps.Neutre) {
+                    main.utils.playSoundToAll(Sound.ENDERDRAGON_GROWL);
+                } else if (winCamp == camps.Couple) {
+                    main.utils.playSoundToAll(Sound.VILLAGER_IDLE); // faut changer un bruit de fleche, même qu'uhcworld ^^
+                }
             }
         } else {
             event.setDeathMessage("§b[§c☠§b] §3§l" + player.getName() + "§r§3 est mort.");
