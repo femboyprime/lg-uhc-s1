@@ -3,18 +3,10 @@ package org.uhc2;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import org.uhc2.commands.*;
 import org.uhc2.events.eventsManager;
 import org.uhc2.enums.states;
 import org.uhc2.enums.roles;
-
-import org.uhc2.commands.gm;
-import org.uhc2.commands.lg;
-import org.uhc2.commands.test;
-import org.uhc2.commands.startuhc;
-import org.uhc2.commands.stopuhc;
-import org.uhc2.commands.compo;
-import org.uhc2.commands.heal;
-import org.uhc2.commands.feed;
 
 import java.util.*;
 
@@ -43,8 +35,15 @@ public final class Uhc2 extends JavaPlugin {
     public String _cyan = "§b";
     public String _gold = "§6";
     public String _bold = "§l";
+    public String _gray = "§8";
+    public String _red = "§c";
+    public String _green = "§a";
+    public String _dred = "§4";
+    public String _dgreen = "§2";
 
     // strings
+    public String uhctag_error = (_red+"UHC "+_gray+"| "+_dred);
+    public String uhctag_valid = (_green+"UHC "+_gray+"| "+_dgreen);
     public String gameTag_Show = (_cyan+"["+_gold+_bold+"LOUPS-GAROUS"+_cyan+"]" + _text);
     public String gameTag_Public = (gameTag_Show + ": ");
     public String gameTag_Prive = (gameTag_Show + " [Privé]: ");
@@ -103,17 +102,24 @@ public final class Uhc2 extends JavaPlugin {
         state = states.WAITING;
 
         // register commands
+        this.getCommand("deleteworld").setExecutor(new deleteworld(this));
+        this.getCommand("createworld").setExecutor(new createworld(this));
+        this.getCommand("tpworld").setExecutor(new tpworld(this));
+
         this.getCommand("startuhc").setExecutor(new startuhc(this));
         this.getCommand("stopuhc").setExecutor(new stopuhc(this));
+        this.getCommand("enduhc").setExecutor(new enduhc(this));
+
         this.getCommand("compo").setExecutor(new compo(this));
+
         this.getCommand("heal").setExecutor(new heal(this));
         this.getCommand("feed").setExecutor(new feed(this));
         this.getCommand("test").setExecutor(new test(this));
+
         this.getCommand("lg").setExecutor(new lg(this));
         this.getCommand("gm").setExecutor(new gm(this));
 
         // les descriptions
-        // roles.ROLE.description = _text + "Votre objectif est d'éliminer les " + _loupgarou + "Loups-Garous" + _text + ". ";
         roles.Petite_Fille.setDescription(_text + "Votre objectif est de gagner avec les " + _villageois + "Villageois" + _text + ". Vous disposez de l'effet " + _nv + "Night Vision" + _text + " en permanence, ainsi que des effets " + _inv + "Invisibility I" + _text + " et " + _wk + "Weakness I" + _text + " la nuit. Vous disposez également de 2 potions de " + _sp + "Speed I" + _text + ". Au crépuscule et au milieu de la nuit, vous connaîtrez les pseudos des joueurs situés dans un rayon de 100 blocks autour de vous.");
         roles.Sorciere.setDescription(_text + "Votre objectif est de gagner avec les " + _villageois + "Villageois" + _text + ". Pour ce faire, vous disposez de 3 potions splash d'"+_ih+"Instant Health I"+_text+", d'une potion splash de "+_rg+"Regeneration I"+_text+" et de 3 potions splash d'"+_id+"Instant Damage I"+_text+". Vous avez le pouvoir de ressuciter un joueur une fois dans la partie, à l'aide de la commande "+_cmd+"/lg sauver <pseudo>"+_text+".");
         roles.Voyante_Bavarde.setDescription(_text + "Votre objectif est de gagner avec les " + _villageois + "Villageois" + _text + ". Vous disposez de l'effet " + _nv + "Night Vision" + _text + ", de 4 bibliothèques et de 4 blocks d'obsidienne. A chaque début de journée, vous pourrez connaître le rôle d'un joueur à l'aide de la commande "+_cmd+"/lg voir <pseudo>"+_text+".");

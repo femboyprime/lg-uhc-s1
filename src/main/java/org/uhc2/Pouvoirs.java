@@ -149,7 +149,7 @@ public class Pouvoirs {
 
             // 2 lava buckets
             for (int index = 0; index < 2; index++) {
-                ItemStack lavabuckets = new ItemStack(Material.LAVA_BUCKET, 2);
+                ItemStack lavabuckets = new ItemStack(Material.LAVA_BUCKET, 1);
 
                 player.getInventory().addItem(lavabuckets);
             }

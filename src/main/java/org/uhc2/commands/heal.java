@@ -36,6 +36,8 @@ public class heal implements CommandExecutor {
                 player.setHealth(player.getMaxHealth());
                 player.sendMessage(main.gameTag_Prive + "Healed yourself.");
             }
+
+            return true;
         }
 
         return true;

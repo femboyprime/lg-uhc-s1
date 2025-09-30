@@ -13,6 +13,14 @@ commands:
     description: starts the uhc
   stopuhc:
     description: stops the uhc
+  enduhc:
+    description: tries to end the current uhc
+  createworld:
+    description: creates a world
+  deleteworld:
+      description: deletes a world
+  tpworld:
+      description: teleports you to a world
   compo:
     description: add or remove roles with a gui
   test:

@@ -58,7 +58,11 @@ public class Utils {
                 main.cycle = !main.cycle;
 
                 if (main.cycle) {
-                    sendMessageToAll("§6§l☀ LE JOUR SE LEVE ☀"); // j'ai prit trop de temps pour chercher les unicodes
+                    if ( !(main.episodeInt == 0) ) {
+                        sendMessageToAll("§6§l☀ LE JOUR SE LEVE ☀"); // j'ai prit trop de temps pour chercher les unicodes
+                    }
+
+
                     for (Joueur joueur : main.joueurPlayer.keySet()) {
                         // set scoreboard
                         joueur.getScoreboard().setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Jour");
@@ -73,7 +77,10 @@ public class Utils {
                     }
 
                 } else {
-                    sendMessageToAll("§9§l☾ LA NUIT TOMBE ☽"); // j'ai prit trop de temps pour chercher les unicodes
+                    if ( !(main.episodeInt == 0) ) {
+                        sendMessageToAll("§9§l☾ LA NUIT TOMBE ☽"); // j'ai prit trop de temps pour chercher les unicodes
+                    }
+
                     for (Joueur joueur : main.joueurPlayer.keySet()) {
                         // set scoreboard
                         joueur.getScoreboard().setLine(10, ChatColor.GOLD + "Cycle: " + ChatColor.YELLOW + "Nuit");
@@ -165,6 +172,8 @@ public class Utils {
                 if (aliveCamp == null) {
                     aliveCamp = joueur.getCamp(); // le 1er camps d'un type vivant (et oui jamy)
 
+                } else if (aliveCamp == camps.Neutre && joueur.getCamp() == camps.Neutre) { // faut pas que tout les rôles solo win ensemble x)
+                    shouldEndGame = false;
                 } else if (aliveCamp != joueur.getCamp()) { // si le camp du 1er type vivant est diff du 1er type, alors personne n'a win :)
                     shouldEndGame = false;
                     break;
@@ -178,15 +187,25 @@ public class Utils {
         if (shouldEndGame && aliveCamp != null) {
             switch (aliveCamp) {
                 case Couple:
-                    winMessage = "§f§lLe §dCouple§f a gagné !";
+                    winMessage = "" + ChatColor.DARK_PURPLE  + ChatColor.BOLD + "Le " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "Couple" + ChatColor.DARK_PURPLE  + ChatColor.BOLD + " a gagné la partie !";
+                    break;
+
                 case Neutre:
-                    winMessage = "§f§lUn §6solitaire§f a gagné !";
+                    winMessage = "" + ChatColor.YELLOW  + ChatColor.BOLD + "Un rôle " + ChatColor.GOLD + ChatColor.BOLD + "Solitaire" + ChatColor.YELLOW  + ChatColor.BOLD + " a gagné la partie !";
+                    break;
+
                 case LoupGarou:
-                    winMessage = "§f§lLes §cLoups-Garous§f ont gagné !";
+                    winMessage = "" + ChatColor.DARK_RED  + ChatColor.BOLD + "Les " + ChatColor.RED + ChatColor.BOLD + "Loups-Garous" + ChatColor.DARK_RED  + ChatColor.BOLD + " ont gagné la partie !";
+
+                    break;
+
                 case Village:
-                    winMessage = "§f§lLe §avillage§f a gagné !";
+                    winMessage = "" + ChatColor.DARK_GREEN  + ChatColor.BOLD + "Le " + ChatColor.GREEN + ChatColor.BOLD + "Village" + ChatColor.DARK_GREEN  + ChatColor.BOLD + " a gagné la partie !";
+                    break;
+
                 default:
                     winMessage = "bug ? (switch -> default?)";
+                    break;
             }
         }
 

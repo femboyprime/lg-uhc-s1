@@ -35,6 +35,8 @@ public class feed implements CommandExecutor {
                 player.setFoodLevel(20);
                 player.sendMessage(main.gameTag_Prive + "Fed yourself.");
             }
+
+            return true;
         }
 
         return true;

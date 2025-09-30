@@ -25,6 +25,8 @@ public class test implements CommandExecutor {
                 main.pouvoirs.giveEffect(joueur, main.pouvoirs.lg_speed);
                 main.pouvoirs.giveEffect(joueur, main.pouvoirs.lg_abso);
             }
+
+            return true;
         }
 
 

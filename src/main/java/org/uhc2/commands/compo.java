@@ -17,6 +17,7 @@ public class compo implements CommandExecutor {
             Player player = (Player) sender;
 
             main.composition.entityOpenInventory(player);
+            return true;
         }
 
         return true;

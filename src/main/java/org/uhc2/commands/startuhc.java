@@ -24,6 +24,7 @@ public class startuhc implements CommandExecutor {
             }
 
             main.utils.timerResume();
+            return true;
         }
 
         return true;

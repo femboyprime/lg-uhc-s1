@@ -20,26 +20,42 @@ public class gm implements CommandExecutor {
             if (args.length >= 1) {
                 String gamemodeAsked = args[0];
 
-                //noinspection IfCanBeSwitch
-                if (gamemodeAsked.equals("1") || gamemodeAsked.equals("c")) {
-                    player.setGameMode(GameMode.CREATIVE);
-                    player.sendMessage(main.gameTag_Prive + "Set gamemode to §cCREATIVE§9.");
-                } else if (gamemodeAsked.equals("0") || gamemodeAsked.equals("s")) {
-                    player.setGameMode(GameMode.SURVIVAL);
-                    player.sendMessage(main.gameTag_Prive + "Set gamemode to §cSURVIVAL§9.");
-                } else if (gamemodeAsked.equals("2") || gamemodeAsked.equals("a")) {
-                    player.setGameMode(GameMode.ADVENTURE);
-                    player.sendMessage(main.gameTag_Prive + "Set gamemode to §cADVENTURE§9.");
-                } else if (gamemodeAsked.equals("3") || gamemodeAsked.equals("sp")) {
-                    player.setGameMode(GameMode.SPECTATOR);
-                    player.sendMessage(main.gameTag_Prive + "Set gamemode to §cSPECTATOR§9.");
-                } else {
-                    player.sendMessage(main.gameTag_Prive + "Le gamemode n'existe pas.");
-                }
+                switch (gamemodeAsked) {
+                    case "1":
+                    case "c":
+                        player.setGameMode(GameMode.CREATIVE);
+                        player.sendMessage(main.gameTag_Prive + "Set gamemode to §cCREATIVE§9.");
+                        break;
 
+                    case "0":
+                    case "s":
+                        player.setGameMode(GameMode.SURVIVAL);
+                        player.sendMessage(main.gameTag_Prive + "Set gamemode to §cSURVIVAL§9.");
+                        break;
+
+                    case "2":
+                    case "a":
+                    case "ad":
+                        player.setGameMode(GameMode.ADVENTURE);
+                        player.sendMessage(main.gameTag_Prive + "Set gamemode to §cADVENTURE§9.");
+                        break;
+
+                    case "3":
+                    case "sp":
+                    case "spec":
+                        player.setGameMode(GameMode.SPECTATOR);
+                        player.sendMessage(main.gameTag_Prive + "Set gamemode to §cSPECTATOR§9.");
+                        break;
+
+                    default:
+                        player.sendMessage(main.gameTag_Prive + "Le gamemode n'existe pas.");
+                        break;
+                }
             } else {
                 player.sendMessage(main.gameTag_Prive + "Pas de gamemode donné.");
             }
+
+            return true;
         }
 
         return true;
