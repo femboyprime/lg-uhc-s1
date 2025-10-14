@@ -30,10 +30,11 @@
 ### Developpé par femboyprime / scriptservice / getasset.
 ---
 ## Credits:
-- [@NickNqck](https://github.com/NickNqck)
+- [@NickNqck](https://github.com/NickNqck) & [Minecraft Tools](https://minecraft.tools/fr/)
   - Generation des maps & des chunks customisé
-    - [Repo Exacte](https://github.com/NickNqck/UHC_Meetup/tree/e25019b9c64826181e202db3dc8094e946304c7c)
+    - [Repo Exacte de NickNqck](https://github.com/NickNqck/UHC_Meetup/tree/e25019b9c64826181e202db3dc8094e946304c7c)
+    - [Site web](https://minecraft.tools/fr/custom.php)
 - [@zyuiop](https://github.com/zyuiop)
-  - Utilisation des scoreboard
+  - Utilisation des scoreboards
     - ***REPO EXACTE INTROUVABLE***
     - [Repo Utilisable](https://github.com/zyuiop/OpenUHC/blob/master/src/main/java/net/zyuiop/openUHC/ScoreboardManager.java)
