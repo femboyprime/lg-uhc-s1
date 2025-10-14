@@ -28,6 +28,7 @@
 
 ---
 ### Developpé par femboyprime / scriptservice / getasset.
+---
 ## Credits:
 - [@NickNqck](https://github.com/NickNqck)
   - Generation des maps
