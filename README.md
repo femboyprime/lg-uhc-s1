@@ -31,7 +31,7 @@
 ---
 ## Credits:
 - [@NickNqck](https://github.com/NickNqck)
-  - Generation des maps
+  - Generation des maps & des chunks customisé
     - [Repo Exacte](https://github.com/NickNqck/UHC_Meetup/tree/e25019b9c64826181e202db3dc8094e946304c7c)
 - [@zyuiop](https://github.com/zyuiop)
   - Utilisation des scoreboard
